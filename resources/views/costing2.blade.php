@@ -16,27 +16,23 @@
                     <th>Dry Good</th>
                     <th>Veggies</th>
                     <th>Meat</th>
+                    <th>Fruit</th>
                     <th>Total per hari</th>
                     <th>Control harus 0</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>01-01-2025</td>
-                    <td>Rp-</td>
-                    <td>Rp-</td>
-                    <td>Rp-</td>
-                    <td>Rp-</td>
-                    <td>Rp-</td>
-                </tr>
-                <tr>
-                    <td>02-02-2025</td>
-                    <td>Rp-</td>
-                    <td>Rp-</td>
-                    <td>Rp-</td>
-                    <td>Rp-</td>
-                    <td>Rp-</td>
-                </tr>
+                @foreach ($rekap_barang_keluar as $data)
+                    <tr>
+                        <td>{{ $data->created_at }}</td>
+                        <td>Rp. {{ number_format($data->dry_good, 2, ',', '.') }}</td>
+                        <td>Rp. {{ number_format($data->veggies, 2, ',', '.') }}</td>
+                        <td>Rp. {{ number_format($data->meat, 2, ',', '.') }}</td>
+                        <td>Rp. {{ number_format($data->fruit, 2, ',', '.') }}</td>
+                        <td>Rp. {{ number_format($data->total, 2, ',', '.') }}</td>
+                        <td>Rp. {{ number_format($data->control, 2, ',', '.') }}</td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
     </div>

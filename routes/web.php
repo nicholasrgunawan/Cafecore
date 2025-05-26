@@ -3,7 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BahanController;
+use App\Http\Controllers\BarangKeluarController;
+use App\Http\Controllers\BarangMasukController;
+use App\Http\Controllers\CostingCafeController;
+use App\Http\Controllers\CostingGudangController;
+use App\Http\Controllers\CostingSSGController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserController;
+use App\Models\BarangMasuk;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Password;
@@ -77,39 +85,63 @@ Route::get('/dashboard', function () {
 })->name('dashboard');
 
 //Bahan
-Route::get('/bahan', function () {
-    return view('bahan', ['pageTitle' => 'Bahan']);
-})->name('bahan');
+Route::get('/add_bahan', function () {
+    return view('add.add_bahan', ['pageTitle' => 'Add Bahan']);
+})->name('add_bahan');
+
+Route::get('/edit_bahan', function () {
+    return view('edit.edit_bahan', ['pageTitle' => 'Edit Bahan']);
+})->name('edit_bahan');
+
+Route::post('/bahan/store', [BahanController::class, 'store'])->name('bahan.store');
+Route::delete('/bahan/{id}', [BahanController::class, 'destroy'])->name('bahan.destroy');
+Route::get('/bahan/{id}/edit', [BahanController::class, 'edit'])->name('bahan.edit');
+Route::put('/bahan/{id}', [BahanController::class, 'update'])->name('bahan.update');
+Route::get('/bahan', [BahanController::class, 'index'])->name('bahan');
+
 
 //Menu
-Route::get('/menu', function () {
-    return view('menu', ['pageTitle' => 'Menu']);
-})->name('menu');
+Route::get('/edit_menu', function () {
+    return view('edit.edit_menu', ['pageTitle' => 'Edit Menu']);
+})->name('edit_menu');
+Route::get('/menus', [MenuController::class, 'index'])->name('menu.index');
+Route::get('menu/create', [MenuController::class, 'create'])->name('menu.create');
+Route::post('/menu/store', [MenuController::class, 'store'])->name('menu.store');
+Route::delete('/menu/{id}', [MenuController::class, 'destroy'])->name('menu.destroy');
+Route::get('/menu/{id}/edit', [MenuController::class, 'edit'])->name('menu.edit');
+Route::put('/menu/{id}', [MenuController::class, 'update'])->name('menu.update');
+Route::get('/menu', [MenuController::class, 'index'])->name('menu');
+Route::get('/add_menu', [MenuController::class, 'create'])->name('add_menu');
 
 //Barang Masuk
-Route::get('/barang_masuk', function () {
-    return view('barang_masuk', ['pageTitle' => 'Barang Masuk']);
-})->name('barang_masuk');
+Route::get('/get-bahan-details/{bahan}', [BarangMasukController::class, 'getBahanDetails']);
+Route::get('/barang_masuk', [BarangMasukController::class, 'index'])->name('barang_masuk');
+Route::post('/save-barang-masuk', [BarangMasukController::class, 'store']);
+Route::get('/barangmasuk/saved_data', [BarangMasukController::class, 'saved_data'])->name('barangmasuk.saved_data');
+Route::delete('/barang-masuk/clear', [App\Http\Controllers\BarangMasukController::class, 'clearAll'])->name('barang-masuk.clear');
+Route::delete('/barang-masuk/{id}', [BarangMasukController::class, 'destroy'])->name('barang-masuk.destroy');
+Route::post('/barang-masuk/import', [BarangMasukController::class, 'import'])->name('barang-masuk.import');
 
 //Barang Keluar
-Route::get('/barang_keluar', function () {
-    return view('barang_keluar', ['pageTitle' => 'Barang Keluar']);
-})->name('barang_keluar');
+Route::get('/get-bahan-details/{bahan}', [BarangKeluarController::class, 'getBahanDetails']);
+Route::get('/barang_keluar', [BarangKeluarController::class, 'index'])->name('barang_keluar');
+Route::post('/save-barang-keluar', [BarangKeluarController::class, 'store']);
+Route::get('/barangkeluar/saved_data', [BarangKeluarController::class, 'saved_data'])->name('barangkeluar.saved_data');
+Route::delete('/barang-keluar/clear', [App\Http\Controllers\BarangKeluarController::class, 'clearAll'])->name('barang-keluar.clear');
+Route::delete('/barang-keluar/{id}', [BarangKeluarController::class, 'destroy'])->name('barang-keluar.destroy');
+Route::post('/barang-keluar/import', [BarangKeluarController::class, 'import'])->name('barang-keluar.import');
+
+
 
 //Costing(Gudang)
-Route::get('/costing', function () {
-    return view('costing', ['pageTitle' => 'Costing(Gudang)']);
-})->name('costing');
+Route::get('/costing', [CostingGudangController::class, 'index'])->name('costing');
+
 
 //Costing(Cafe)
-Route::get('/costing2', function () {
-    return view('costing2', ['pageTitle' => 'Costing(Café)']);
-})->name('costing2');
+Route::get('/costing2', [CostingCafeController::class, 'index'])->name('costing2');
 
 //Costing(SSG)
-Route::get('/costing3', function () {
-    return view('costing3', ['pageTitle' => 'Costing(SSG)']);
-})->name('costing3');
+Route::get('/costing3', [CostingSSGController::class, 'index'])->name('costing3');
 
 //REV Konversi Harga Barang
 Route::get('/standard_recipe', function () {
@@ -148,3 +180,20 @@ Route::get('/menu_engineering4', function () {
 
 //Users
 Route::get('/users', [UserController::class, 'index'])->name('users');
+
+Route::get('/add_user', function () {
+    return view('add.add_user', ['pageTitle' => 'Add User']);
+})->name('add_user');
+
+Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
+Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('delete_user');
+Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+Route::get('/users', [UserController::class, 'index'])->name('users');
+
+
+
+Route::get('/edit_user', function () {
+    return view('edit.edit_user', ['pageTitle' => 'Edit User']);
+})->name('edit_user');
+

@@ -13,51 +13,51 @@
       <table id="barangTable" class="display" style="width:100%">
           <thead>
               <tr>
-                  <th>Kategori</th>
-                  <th>Pembelanjaan</th>
-                  <th>Pengeluaran</th>
-                  <th>Saldo Gudang</th>
+                <th>Tanggal</th>
+                <th>Kategori</th>
+                <th>Pemasukan</th>
+                <th>Pengeluaran</th>
+                <th>Saldo Gudang</th>
               </tr>
           </thead>
           <tbody>
-              <tr>
-                  <td>Kategori 1</td>
-                  <td>Rp-</td>
-                  <td>Rp-</td>
-                  <td>Rp-</td>
-              </tr>
-              <tr>
-                <td>Kategori 2</td>
-                <td>Rp-</td>
-                <td>Rp-</td>
-                <td>Rp-</td>
-            </tr>
-            <tr>
-                <td>Kategori 3</td>
-                <td>Rp-</td>
-                <td>Rp-</td>
-                <td>Rp-</td>
-            </tr>
-          </tbody>
+            @foreach ($data as $row)
+                <tr>
+                    <td>{{ \Carbon\Carbon::parse($row['date'])->format('d-m-y') }}</td>
+                    <td>{{ ucfirst(str_replace('_', ' ', $row['kategori'])) }}</td>
+                    <td>Rp{{ number_format($row['pembelanjaan'], 0, ',', '.') }}</td>
+                    <td>Rp{{ number_format($row['pengeluaran'], 0, ',', '.') }}</td>
+                    <td>
+                        @php
+                            $saldo = $row['pembelanjaan'] - $row['pengeluaran'];
+                        @endphp
+                        Rp{{ number_format($saldo, 0, ',', '.') }}
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
       </table>
 
       <!-- Summary Table -->
       <table class="table table-bordered text-center mt-4" id="summaryTable">
-          <tbody>
-              <tr class="table-secondary">
-                  <td colspan="6" class="text-start fw-bold">Total Pembelanjaan</td>
-                  <td>Rp-</td>
-              </tr>
-              <tr class="table-secondary">
-                <td colspan="6" class="text-start fw-bold">Total Pengeluaran</td>
-                <td>Rp-</td>
-            </tr>
-            <tr class="table-secondary">
-                <td colspan="6" class="text-start fw-bold">Saldo Gudang</td>
-                <td>Rp-</td>
-            </tr>
-          </tbody>
-      </table>
+    <tbody>
+        <tr class="table-secondary">
+            <td colspan="6" class="text-start fw-bold">Total Pembelanjaan</td>
+            <td>Rp{{ number_format($totalPemasukan, 0, ',', '.') }}</td>
+        </tr>
+        <tr class="table-secondary">
+            <td colspan="6" class="text-start fw-bold">Total Pengeluaran</td>
+            <td>Rp{{ number_format($totalPengeluaran, 0, ',', '.') }}</td>
+        </tr>
+        <tr class="table-secondary">
+            <td colspan="6" class="text-start fw-bold">Saldo Gudang</td>
+            <td>
+                Rp{{ number_format($totalPemasukan - $totalPengeluaran, 0, ',', '.') }}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
   </div>
 </section>
 
