@@ -138,7 +138,23 @@
                         <a href="{{ route('menu') }}" class="nav-link {{ request()->routeIs('menu') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-book"></i>
                             <p>Menu</p>
+                            <i class="fas fa-angle-left right"></i>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('kategori_menu') }}" class="nav-link {{ request()->routeIs('kategori_menu') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Kategori</p>
+                              </a>
+                            </li>  
+                            <li class="nav-item">
+                                <a href="{{ route('menu') }}" class="nav-link {{ request()->routeIs('menu') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Menu</p>
+                              </a>
+                            </li>  
+                                                     
+                          </ul>
                     </li>
 
                     <li class="nav-item">
@@ -199,17 +215,17 @@
                               </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('standard_recipe2') }}" class="nav-link {{ request()->routeIs('standard_recipe2') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>HPP Food</p>
-                              </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('standard_recipe3') }}" class="nav-link {{ request()->routeIs('standard_recipe3') ? 'active' : '' }}">
+                                <a href="{{ route('menu_pricing') }}" class="nav-link {{ request()->routeIs('menu_pricing') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Menu Pricing</p>
                               </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('hpp_food') }}" class="nav-link {{ request()->routeIs('hpp_food') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>HPP Food</p>
+                              </a>
+                            </li>                            
                           </ul>
                     </li>
 
@@ -290,6 +306,33 @@
                     $(".preloader").fadeOut();
                 });
             </script>
+            <!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+
+<!-- Bootstrap 4 -->
+<script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+<!-- overlayScrollbars -->
+<script src="{{ asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+
+<!-- AdminLTE App -->
+<script src="{{ asset('dist/js/adminlte.js') }}"></script>
+
+<!-- OPTIONAL SCRIPTS -->
+<!-- ChartJS -->
+<script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
+
+<!-- Summernote -->
+<script src="{{ asset('plugins/summernote/summernote-bs4.min.js') }}"></script>
+
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{{ asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+
+<!-- Daterangepicker -->
+<script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
+
         </body>
 
 </html>

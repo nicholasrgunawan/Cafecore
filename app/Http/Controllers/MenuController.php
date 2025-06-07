@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bahan;
+use App\Models\KategoriMenu;
 use Illuminate\Http\Request;
 use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
@@ -11,7 +12,7 @@ class MenuController extends Controller
 {
     public function index()
     {
-        $menus = Menu::all(); // Get all menus
+        $menus = Menu::with('kategoriMenu')->get(); // Get all menus
         return view('menu', [
             'menus'   => $menus,
             'pageTitle' => 'Menu', // Page title
@@ -19,29 +20,28 @@ class MenuController extends Controller
     }
 
     public function store(Request $request)
-    {
-        // Validate the form inputs
-        $validated = $request->validate([
-            'menu' => 'required|string|max:255',
-            'kategori' => 'required|string|max:255',
-            'bahan' => 'required|array|min:1', // Ensure at least one bahan is selected
-            'bahan.*' => 'required|string|max:255', // Ensure each bahan is a valid string
-        ]);
+{
+    // Validate the form inputs
+    $validated = $request->validate([
+        'menu' => 'required|string|max:255',
+        'kategori_menu_id' => 'required|exists:kategori_menus,id',
+        'desc' => 'required|string|max:255',
+    ]);
 
-        try {
-            // Store new menu
-            $menu = new Menu();
-            $menu->menu = $request->menu;
-            $menu->kategori = $request->kategori;
-            $menu->bahan = implode(', ', $request->bahan); // Combine the bahan array into a single string
-            $menu->save();
+    try {
+        // Store new menu
+        $menu = new Menu();
+        $menu->menu = $request->menu;
+        $menu->kategori_menu_id = $request->kategori_menu_id;
+        $menu->desc = $request->desc;
+        $menu->save();
 
-            return redirect()->route('menu.index')->with('success', 'Menu added successfully!');
-        } catch (\Exception $e) {
-            // Catch any errors that occur and show a message
-            return redirect()->back()->with('error', 'Failed to create menu: ' . $e->getMessage());
-        }
+        return redirect()->route('menu.index')->with('success', 'Menu added successfully!');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Failed to create menu: ' . $e->getMessage());
     }
+}
+
 
 
 
@@ -63,36 +63,36 @@ class MenuController extends Controller
     public function edit($id)
     {
         $menu = Menu::findOrFail($id);
+        $kategori_menus = KategoriMenu::select('id', 'kategori')->get();
         $bahans = Bahan::all(); // Get all available bahan options
-        return view('edit.edit_menu', compact('menu', 'bahans'));
+        return view('edit.edit_menu', compact('menu', 'bahans','kategori_menus'));
     }
 
 
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'menu' => 'required|string',
-            'kategori' => 'required|string',
-            'bahan' => 'required|array',
-        ]);
+{
+    $request->validate([
+        'menu' => 'required|string',
+        'kategori_menu_id' => 'required|exists:kategori_menus,id',
+        'desc' => 'required|string',
+    ]);
 
-        // Get bahan names from IDs
-        $bahanNames = Bahan::whereIn('id', $request->bahan)->pluck('bahan')->toArray();
-        $bahanString = implode(', ', $bahanNames); // Convert array to string
+    $menu = Menu::findOrFail($id);
+    $menu->menu = $request->menu;
+    $menu->kategori_menu_id = $request->kategori_menu_id;
+    $menu->desc = $request->desc;
+    $menu->save();
 
-        // Update the menu
-        $menu = Menu::findOrFail($id);
-        $menu->menu = $request->menu;
-        $menu->kategori = $request->kategori;
-        $menu->bahan = $bahanString; // Save as string
-        $menu->save();
+    return redirect()->route('menu.index')->with('success', 'Menu updated successfully!');
+}
 
-        return redirect()->route('menu.index')->with('success', 'Menu updated successfully!');
-    }
 
     public function create()
     {
-        $bahans = Bahan::pluck('bahan');
-        return view('add.add_menu', compact('bahans')); // ✅ THIS IS IMPORTANT
+        $kategori_menus = KategoriMenu::select('id', 'kategori')->get();
+        return view('add.add_menu', [
+        'kategori_menus' => $kategori_menus,
+        'pageTitle' => 'Create Menu',
+    ]);
     }
 }

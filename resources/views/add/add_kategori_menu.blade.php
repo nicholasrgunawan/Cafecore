@@ -20,28 +20,17 @@
                 <!-- general form elements -->
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Product Detail</h3>
+                        <h3 class="card-title">Kategori Detail</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form method="POST" action="{{ route('menu.store') }}">
+                    <form method="POST" action="{{ route('kategori_menu.store') }}">
                         @csrf
                     
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="exampleInputMenu">Menu</label>
-                                <input type="text" class="form-control" id="exampleInputMenu" name="menu" placeholder="Enter name" required>
-                            </div>
-                    
-                            <div class="form-group">
-                                <label for="exampleInputKategori">Kategori</label>
-                                <select name="kategori_menu_id" class="form-control" required>
-    <option value="">-- Choose Kategori --</option>
-    @foreach($kategori_menus as $kategori)
-        <option value="{{ $kategori->id }}">{{ $kategori->kategori }}</option>
-    @endforeach
-</select>
-
+                                <label for="exampleInputKategoriMenu">Kategori</label>
+                               <input type="text" class="form-control" id="exampleInputKategoriMenu" name="kategori" placeholder="Enter name" required>
                             </div>
                     
                             <div class="form-group">

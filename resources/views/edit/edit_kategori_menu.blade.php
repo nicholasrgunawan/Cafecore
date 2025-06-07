@@ -22,30 +22,21 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form method="POST" action="{{ route('menu.update', $menu->id) }}">
+                    <form method="POST" action="{{ route('kategori_menu.update', $kategori_menu->id) }}">
                         @csrf
                         @method('PUT')
 
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="exampleInputMenu">Menu</label>
-                                <input type="text" class="form-control" id="exampleInputMenu" name="menu"
-                                    value="{{ old('menu', $menu->menu) }}" placeholder="Enter name" required>
+                                <input type="text" class="form-control" id="exampleInputKategori" name="kategori"
+                                    value="{{ old('kategori_menu', $kategori_menu->kategori) }}" placeholder="Enter name" required>
                             </div>
-
-                            <div class="form-group">
-                                <label for="exampleInputKategori">Kategori</label>
-                                <select name="kategori_menu_id" class="form-control" required>
-    <option value="">-- Choose Kategori --</option>
-    @foreach($kategori_menus as $kategori)
-        <option value="{{ $kategori->id }}">{{ $kategori->kategori }}</option>
-    @endforeach
-</select>
 
                             <div class="form-group">
                                 <label for="exampleInputDesc">Description</label>
                                 <input type="text" class="form-control" id="exampleInputDesc" name="desc"
-                                    value="{{ old('menu', $menu->desc) }}" placeholder="Enter description" required>
+                                    value="{{ old('kategori_menu', $kategori_menu->desc) }}" placeholder="Enter description" required>
                             </div>
 
                             

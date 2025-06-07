@@ -18,18 +18,12 @@
               </tr>
           </thead>
           <tbody>
-              <tr>
-                  <td>01-01-2025</td>
-                  <td>Rp-</td>
-              </tr>
-              <tr>
-                <td>02-02-2025</td>
-                <td>Rp-</td>
-            </tr>
-            <tr>
-                <td>03-03-2025</td>
-                  <td>Rp-</td>
-            </tr>
+              @foreach ($sales_report as $data)
+                <tr>
+                    <td>{{ $data->created_at }}</td>
+                    <td>Rp. {{ number_format($data->total, 2, ',', '.') }}</td>
+                </tr>
+            @endforeach
           </tbody>
       </table>
 
@@ -39,7 +33,10 @@
               
             <tr class="table-secondary">
                 <td colspan="6" class="text-start fw-bold">Total Sales</td>
-                <td>Rp-</td>
+                <td>
+    Rp. {{ number_format(collect($sales_report)->sum('total'), 2, ',', '.') }}
+</td>
+
             </tr>
           </tbody>
       </table>

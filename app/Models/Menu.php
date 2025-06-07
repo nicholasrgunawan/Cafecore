@@ -17,7 +17,7 @@ class Menu extends Model
     protected $fillable = [
         'menu',           // Adjusted for menu name
         'kategori',       // Adjusted for menu category
-        'bahan',
+        'desc',
     ];
 
     /**
@@ -35,16 +35,24 @@ class Menu extends Model
      *
      * @return array<string, string>
      */
-    protected $casts = [
-        'price' => 'float',        // Ensure price is cast to float
-        'availability' => 'boolean', // If availability is a boolean field
-    ];
+    
 
      // Menu.php (Menu model)
      public function bahans()
      {
          return $this->belongsToMany(Bahan::class, 'menu_bahan', 'menu_id', 'bahan_id');
      }
+
+// Menu.php
+public function kategoriMenu()
+{
+    return $this->belongsTo(KategoriMenu::class, 'kategori_menu_id');
+}
+
+public function summary()
+{
+    return $this->hasOne(MenuSummary::class, 'menu_id');
+}
 
 
 }

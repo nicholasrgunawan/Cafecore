@@ -11,7 +11,7 @@
             <!-- small box -->
             <div class="small-box" style="background: white">
               <div class="inner">
-                <h3>1</h3>
+                <h3>{{ $totalUsers }}</h3>
                 <p>Total User</p>
               </div>
               <div class="icon">
@@ -26,8 +26,7 @@
             <!-- small box -->
             <div class="small-box" style="background: white">
               <div class="inner">
-                <h3>100</h3>
-
+               <h3>{{ $totalBarangMasuk }}</h3>
                 <p>Total Barang Masuk</p>
               </div>
               <div class="icon">
@@ -42,7 +41,7 @@
             <!-- small box -->
             <div class="small-box" style="background: white">
               <div class="inner">
-                <h3>100</h3>
+                <h3>{{ $totalBarangKeluar }}</h3>
 
                 <p>Total Barang Keluar</p>
               </div>
@@ -58,7 +57,18 @@
             <!-- small box -->
             <div class="small-box" style="background: white">
               <div class="inner">
-                <h3>1.000.000</h3>
+                <h3>
+  Rp {{ number_format($totalSales, 0, ',', '.') }}
+
+  @if ($salesTrend === 'up')
+    <i class="fas fa-arrow-up" style="color: #008080;" title="Sales increased this month"></i>
+  @elseif ($salesTrend === 'down')
+    <i class="fas fa-arrow-down text-danger" title="Sales decreased this month"></i>
+  @else
+    <i class="fas fa-minus text-muted" title="Sales unchanged"></i>
+  @endif
+</h3>
+
 
                 <p>Total Penjualan</p>
               </div>
@@ -87,9 +97,7 @@
                 <li class="nav-item">
                   <a class="nav-link active" href="#revenue-chart" data-toggle="tab">Area</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#sales-chart" data-toggle="tab">Donut</a>
-                </li>
+                
               </ul>
             </div>
           </div><!-- /.card-header -->
@@ -100,9 +108,7 @@
                    style="position: relative; height: 300px;">
                   <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>
                </div>
-              <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;">
-                <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>
-              </div>
+              
             </div>
           </div><!-- /.card-body -->
         </div>
@@ -154,53 +160,43 @@
 <script src="dist/js/adminlte.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
 <script>
+  const monthlyLabels = {!! json_encode($monthlySales->pluck('month')) !!};
+  const monthlyData = {!! json_encode($monthlySales->pluck('total')) !!};
+
+  
+
   const ctx = document.getElementById('revenue-chart-canvas').getContext('2d');
 
-  const revenueChart = new Chart(ctx, {
-    type: 'line', // or 'bar', 'doughnut', etc.
-    data: {
-      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      datasets: [{
-        label: 'Sales',
-        data: [120, 190, 300, 500, 200, 300, 400], // dummy data
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 2,
-        fill: true,
-        tension: 0.4
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        y: {
-          beginAtZero: true
-        }
+const revenueChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: monthlyLabels,
+    datasets: [{
+      label: 'Sales',
+      data: monthlyData,
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 2,
+      fill: true,
+      tension: 0.4
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true
       }
     }
-  });
-</script>
+  }
+});
 
-<script>
-  const ctx2 = document.getElementById('sales-chart-canvas').getContext('2d');
 
-  const salesChart = new Chart(ctx2, {
-    type: 'doughnut',
-    data: {
-      labels: ['Drinks', 'Food', 'Snacks'],
-      datasets: [{
-        data: [500, 300, 200], // dummy data
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-        hoverOffset: 10
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-    }
-  });
+
 </script>
 
 

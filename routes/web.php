@@ -9,9 +9,22 @@ use App\Http\Controllers\BarangMasukController;
 use App\Http\Controllers\CostingCafeController;
 use App\Http\Controllers\CostingGudangController;
 use App\Http\Controllers\CostingSSGController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HppFoodController;
+use App\Http\Controllers\KategoriMenusController;
+use App\Http\Controllers\KonversiHargaBahanController;
+use App\Http\Controllers\MainMenuEngineeringController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\MenuPricingController;
+use App\Http\Controllers\RekapSalesController;
+use App\Http\Controllers\SalesPotentialsController;
+use App\Http\Controllers\SalesReportController;
 use App\Http\Controllers\UserController;
 use App\Models\BarangMasuk;
+use App\Models\HppFood;
+use App\Models\KonversiHargaBahan;
+use App\Models\MainMenuEngineering;
+use App\Models\SalesReport;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Password;
@@ -105,13 +118,23 @@ Route::get('/edit_menu', function () {
     return view('edit.edit_menu', ['pageTitle' => 'Edit Menu']);
 })->name('edit_menu');
 Route::get('/menus', [MenuController::class, 'index'])->name('menu.index');
+Route::get('/menu', [MenuController::class, 'index'])->name('menu');
 Route::get('menu/create', [MenuController::class, 'create'])->name('menu.create');
 Route::post('/menu/store', [MenuController::class, 'store'])->name('menu.store');
 Route::delete('/menu/{id}', [MenuController::class, 'destroy'])->name('menu.destroy');
 Route::get('/menu/{id}/edit', [MenuController::class, 'edit'])->name('menu.edit');
 Route::put('/menu/{id}', [MenuController::class, 'update'])->name('menu.update');
-Route::get('/menu', [MenuController::class, 'index'])->name('menu');
 Route::get('/add_menu', [MenuController::class, 'create'])->name('add_menu');
+
+//kategori_menus
+Route::get('/kategori_menus', [KategoriMenusController::class, 'index'])->name('kategori_menu.index');
+Route::get('/kategori_menu', [KategoriMenusController::class, 'index'])->name('kategori_menu');
+Route::get('kategori_menu/create', [KategoriMenusController::class, 'create'])->name('kategori_menu.create');
+Route::get('/add_kategori_menu', [KategoriMenusController::class, 'create'])->name('add_kategori_menu');
+Route::post('/kategori_menu', [KategoriMenusController::class, 'store'])->name('kategori_menu.store');
+Route::delete('/kategori_menu/{id}', [KategoriMenusController::class, 'destroy'])->name('kategori-menu.destroy');
+Route::get('/kategori_menu/{id}/edit', [KategoriMenusController::class, 'edit'])->name('kategori_menu.edit');
+Route::put('/kategori_menu/{id}', [KategoriMenusController::class, 'update'])->name('kategori_menu.update');
 
 //Barang Masuk
 Route::get('/get-bahan-details/{bahan}', [BarangMasukController::class, 'getBahanDetails']);
@@ -144,39 +167,86 @@ Route::get('/costing2', [CostingCafeController::class, 'index'])->name('costing2
 Route::get('/costing3', [CostingSSGController::class, 'index'])->name('costing3');
 
 //REV Konversi Harga Barang
-Route::get('/standard_recipe', function () {
-    return view('standard_recipe', ['pageTitle' => 'Standard Recipe(Konversi Harga Bahan)']);
-})->name('standard_recipe');
-
-//REV HPP Food
-Route::get('/standard_recipe2', function () {
-    return view('standard_recipe2', ['pageTitle' => 'Standard Recipe(HPP Food)']);
-})->name('standard_recipe2');
+Route::get('/get-bahan-details/{bahan}', [KonversiHargaBahanController::class, 'getBahanDetails']);
+Route::get('/standard_recipe', [KonversiHargaBahanController::class, 'index'])->name('standard_recipe');
+Route::post('/save-standard-recipe', [KonversiHargaBahanController::class, 'store'])->name('standardrecipe.store');
+Route::get('/standardrecipe/saved_data', [KonversiHargaBahanController::class, 'saved_data'])->name('standardrecipe.saved_data');
+Route::delete('/standard-recipe/clear', [KonversiHargaBahanController::class, 'clear'])->name('standard-recipe.clear');
+Route::delete('/standard-recipe/{id}', [KonversiHargaBahanController::class, 'destroy'])->name('standard-recipe.destroy');
+Route::post('/standard-recipe/import', [KonversiHargaBahanController::class, 'import'])->name('standard-recipe.import');
 
 //REV Menu Pricing
-Route::get('/standard_recipe3', function () {
-    return view('standard_recipe3', ['pageTitle' => 'Standard Recipe(Menu Pricing)']);
-})->name('standard_recipe3');
+Route::get('/menu_pricing', [MenuPricingController::class, 'index'])->name('menu_pricing');
+Route::get('/add_menu_pricing', [MenuPricingController::class, 'create'])->name('add_menu_pricing');
+Route::get('/add_menu_summary', [MenuPricingController::class, 'create2'])->name('add_menu_summary');
+Route::get('/edit_menu_pricing', [MenuPricingController::class, 'edit'])->name('edit_menu_pricing');
+Route::get('/edit_menu_summary', [MenuPricingController::class, 'edit2'])->name('edit_menu_summary');
+Route::delete('/menu-pricing/{id}', [MenuPricingController::class, 'destroy'])->name('menu-pricing.destroy');
+Route::delete('/menu-summary/{id}', [MenuPricingController::class, 'destroy2'])->name('menu-summary.destroy');
+Route::post('/menu_pricing/store', [MenuPricingController::class, 'store'])->name('menu_pricing.store');
+Route::post('/menu_summary', [MenuPricingController::class, 'store2'])->name('menu_summary.store');
+Route::get('/get-conv/{id}', [App\Http\Controllers\MenuPricingController::class, 'getConv']);
+Route::delete('/menu-pricing/clear', [MenuPricingController::class, 'clearMenuPricing'])->name('menu-pricing.clear');
+Route::delete('/menu-summary/clear', [MenuPricingController::class, 'clearMenuSummary'])->name('menu-summary.clear');
+Route::get('/menu-pricing/{id}/edit', [MenuPricingController::class, 'edit'])->name('menu_pricing.edit');
+Route::put('/menu-pricing/{id}', [MenuPricingController::class, 'update'])->name('menu_pricing.update');
+
+
+
+//REV HPP Food
+Route::get('/hpp_food', [HppFoodController::class, 'index'])->name('hpp_food');
+Route::post('/save-hpp-food', [HppFoodController::class, 'save'])->name('save.hpp_food');
+Route::get('/hppfood/saved_data', [HppFoodController::class, 'saved_data'])->name('hppfood.saved_data');
+Route::delete('/hppfood/clear', [HppFoodController::class, 'clearAll'])->name('hppfood.clear');
+Route::delete('/hppfood/{id}', [HppFoodController::class, 'destroy'])->name('hppfood.destroy');
+Route::delete('/sales-report/{id}', [SalesReportController::class, 'destroy'])->name('sales-report.destroy');
+
+
+
 
 //Menu Engineering
-Route::get('/menu_engineering', function () {
-    return view('menu_engineering', ['pageTitle' => 'Sales Report']);
-})->name('menu_engineering');
+Route::get('/menu_engineering', [SalesReportController::class, 'index'])->name('menu_engineering');
+Route::get('/add_sales_report', [SalesReportController::class, 'create'])->name('add_sales_report');
+Route::post('/sales-report', [SalesReportController::class, 'store'])->name('sales_report.store');
+Route::delete('/sales-report/{id}', [SalesReportController::class, 'destroy'])->name('sales-report.destroy');
+Route::post('/sales-report/clear', [SalesReportController::class, 'clear'])->name('sales-report.clear');
+
+
+
 
 //Menu Engineering2
-Route::get('/menu_engineering2', function () {
-    return view('menu_engineering2', ['pageTitle' => 'Rekap Sales']);
-})->name('menu_engineering2');
+Route::get('/menu_engineering2', [RekapSalesController::class, 'index'])->name('menu_engineering2');
 
 //Menu Engineering3
-Route::get('/menu_engineering3', function () {
-    return view('menu_engineering3', ['pageTitle' => 'Sales & Potentials']);
-})->name('menu_engineering3');
+Route::get('/menu_engineering3', [SalesPotentialsController::class, 'index'])->name('menu_engineering3');
+Route::get('/add_sales_potentials', [SalesPotentialsController::class, 'create'])->name('add_sales_potentials');
+Route::get('/get-sales-data', [SalesPotentialsController::class, 'getSalesData']);
+Route::get('/get-amount-cost', [SalesPotentialsController::class, 'getAmountCost']);
+Route::get('/get-amount-sales', [SalesPotentialsController::class, 'getAmountSales']);
+Route::get('/get-price', [SalesPotentialsController::class, 'getPrice']);
+Route::get('/get-per-cost', [SalesPotentialsController::class, 'getCost']);
+Route::post('/sales_potentials/store', [SalesPotentialsController::class, 'store'])->name('sales_potentials.store');
+Route::delete('/sales-potentials/{id}', [SalesPotentialsController::class, 'destroy'])->name('sales-potentials.destroy');
+Route::delete('/sales-potentials/clear', [SalesPotentialsController::class, 'clear'])->name('sales-potentials.clear');
+
+
+
 
 //Menu Engineering4
-Route::get('/menu_engineering4', function () {
-    return view('menu_engineering4', ['pageTitle' => 'Main']);
-})->name('menu_engineering4');
+Route::get('/menu_engineering4', [MainMenuEngineeringController::class, 'index'])->name('menu_engineering4');
+Route::post('/menu-engineerings/save', [MainMenuEngineeringController::class, 'save'])->name('menu-engineerings.save');
+Route::get('/menu-engineering/saved', [MainMenuEngineeringController::class, 'viewSavedData'])->name('menuengineering.saved_data');
+Route::get('/menu-engineering/latest-summary', [MainMenuEngineeringController::class, 'getLatestSummary'])->name('menu-engineering.getLatestSummary');
+Route::delete('/menu-engineerings/{id}', [MainMenuEngineeringController::class, 'destroy'])->name('menuengineerings.destroy');
+Route::delete('/menu-engineering-summary/{id}', [MainMenuEngineeringController::class, 'destroySummary'])
+    ->name('menuengineeringsummary.destroy');
+
+//Dashboard
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+
+
+
 
 //Users
 Route::get('/users', [UserController::class, 'index'])->name('users');
@@ -197,3 +267,4 @@ Route::get('/edit_user', function () {
     return view('edit.edit_user', ['pageTitle' => 'Edit User']);
 })->name('edit_user');
 
+//Dashboard

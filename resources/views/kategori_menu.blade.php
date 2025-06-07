@@ -12,25 +12,23 @@
             <table id="menuTable" class="display" style="width:100%">
                 <thead>
                     <tr>
-                        <th>ID Menu</th>
-                        <th>Menu</th>
+                        <th>Id</th>
                         <th>Kategori</th>
                         <th>Description</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($menus as $menu)
+                    @foreach ($kategori_menus as $data)
                         <tr>
-                            <td>{{ $menu->id }}</td>
-                            <td>{{ $menu->menu }}</td>
-                            <td>{{ $menu->kategoriMenu->kategori ?? 'N/A' }}</td>
-                            <td>{{ $menu->desc }}</td>
+                            <td>{{ $data->id }}</td>
+                            <td>{{ $data->kategori }}</td>
+                            <td>{{ $data->desc }}</td>
                             <td>
-                                <a href="{{ route('menu.edit', $menu->id) }}" class="text-primary me-2"><i
+                                <a href="{{ route('kategori_menu.edit', $data->id) }}" class="text-primary me-2"><i
                                         class="fas fa-pen-to-square"></i></a>
-                                <a href="#" class="text-danger delete-menu" data-id="{{ $menu->id }}"
-                                    data-url="{{ route('menu.destroy', $menu->id) }}">
+                                <a href="#" class="text-danger delete-kategori-menu" data-id="{{ $data->id }}"
+                                    data-url="{{ route('kategori-menu.destroy', $data->id) }}">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
 
@@ -80,7 +78,7 @@
 <!-- ✅ DataTable Init + Delete Notification -->
 <script>
     $(document).ready(function () {
-        $(document).on('click', '.delete-menu', function (e) {
+        $(document).on('click', '.delete-kategori-menu', function (e) {
             e.preventDefault();
             const url = $(this).data('url');
 
@@ -105,7 +103,7 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Deleted!',
-                                text: response.success || 'The menu has been deleted.',
+                                text: response.success || 'The kategori has been deleted.',
                                 timer: 2000,
                                 showConfirmButton: false
                             });
@@ -127,7 +125,7 @@
         });
 
         const addButton = `
-            <a href="{{ route('add_menu') }}" class="btn btn-primary" id="addMenuBtn">
+            <a href="{{ route('add_kategori_menu') }}" class="btn btn-primary" id="addMenuBtn">
                 <i class="fas fa-plus"></i> Add Menu
             </a>`;
 

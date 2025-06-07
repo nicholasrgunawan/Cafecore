@@ -114,6 +114,7 @@ public function clearAll()
 
     return response()->json(['message' => 'All data cleared successfully']);
 }
+
 public function destroy($id)
 {
     $deleted = BarangMasuk::find($id);
