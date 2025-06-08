@@ -8,9 +8,16 @@ use App\Models\SalesReport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 
 class DashboardController extends Controller
 {
+
+    public function __construct()
+    {
+        View::share('pageTitle', 'Dashboard');
+    }
+    
     public function index()
 {
     $totalUsers = \App\Models\User::count();

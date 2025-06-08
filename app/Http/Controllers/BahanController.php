@@ -5,9 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Bahan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 
 class BahanController extends Controller
 {
+    public function __construct()
+    {
+        View::share('pageTitle', 'Bahan');
+    }
+    
     public function index()
     {
         $bahans = Bahan::all();

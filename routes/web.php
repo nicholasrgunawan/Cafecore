@@ -31,16 +31,8 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-
-Route::middleware("auth")->group(function () {
-    Route::view('/', 'dashboard')->name("dashboard");
-
-    // Logout Route
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-});
-
-// Login Routes
-Route::get('/login', [AuthController::class, "login"])->name('login');
+Route::middleware('guest')->group(function () {
+ Route::get('/login', [AuthController::class, "login"])->name('login');
 Route::post('/login', [AuthController::class, 'loginPost'])->name("login.post");
 
 // Forgot Password Route
@@ -90,7 +82,20 @@ Route::post('/reset-password', function (Request $request) {
     return $status === Password::PASSWORD_RESET
         ? redirect()->route('login')->with('status', 'Your password has been changed')
         : back()->withErrors(['email' => __($status)]);
-})->middleware('guest')->name('password.update');
+})->middleware('guest')->name('password.update');   
+
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Add more protected routes here...
+
+
+
+// Login Routes
+
 
 //Dashboard
 Route::get('/dashboard', function () {
@@ -267,4 +272,4 @@ Route::get('/edit_user', function () {
     return view('edit.edit_user', ['pageTitle' => 'Edit User']);
 })->name('edit_user');
 
-//Dashboard
+});

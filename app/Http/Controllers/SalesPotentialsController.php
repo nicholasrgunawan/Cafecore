@@ -28,7 +28,10 @@ class SalesPotentialsController extends Controller
                 ->distinct()
                 ->get();
 
-    return view('add.add_sales_potentials', compact('sales_reports'));
+    return view('add.add_sales_potentials', [
+        'sales_reports' => $sales_reports,
+        'pageTitle' => 'Add Sales & Potentials',
+    ]);
 }
 
 public function getSalesData(Request $request)

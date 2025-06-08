@@ -7,9 +7,15 @@ use App\Models\KategoriMenu;
 use Illuminate\Http\Request;
 use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 
 class MenuController extends Controller
 {
+    public function __construct()
+    {
+        View::share('pageTitle', 'Menu');
+    }
+    
     public function index()
     {
         $menus = Menu::with('kategoriMenu')->get(); // Get all menus

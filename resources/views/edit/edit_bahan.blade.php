@@ -122,7 +122,13 @@
 <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
-
+<script>
+    $(document).ready(function() {
+        setTimeout(function() {
+            $('.alert').fadeOut('slow');
+        }, 3000); // hides after 3 seconds
+    });
+</script>
 <!-- Scripts -->
 <script src="plugins/jquery/jquery.min.js"></script>
 <script src="plugins/jquery-ui/jquery-ui.min.js"></script>

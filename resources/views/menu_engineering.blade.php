@@ -96,7 +96,6 @@ $(document).ready(function () {
     const addButton = `
         <button class="btn btn-secondary btn-sm">Print laporan</button>
         <button class="btn btn-secondary btn-sm">Import data</button>
-        <button class="btn btn-success btn-sm">Save</button>
         <button id="clearDataBtn" class="btn btn-danger btn-sm">Clear data</button>
         <a href="{{ route('add_sales_report') }}" class="btn btn-primary btn-sm" id="addMenuBtn">
         <i class="fas fa-plus"></i> Add Menu

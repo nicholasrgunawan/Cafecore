@@ -2,6 +2,7 @@
 
 @include('layouts.header')
 @section('title', 'Dashboard')
+
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
